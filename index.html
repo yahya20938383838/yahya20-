@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>موقع يحيى 20</title>
+<style>
+body {
+  text-align: center;
+  background: linear-gradient(45deg, #000000, #330000, #000000);
+  background-size: 400% 400%;
+  animation: bgMove 6s infinite alternate;
+  color: #fff;
+  font-family: 'Tajawal', Arial, sans-serif;
+  overflow-x: hidden;
+  position: relative;
+}
+@keyframes bgMove {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 100% 50%; }
+}
+
+/* صور الأنمي الجانبية */
+.anime-char {
+  position: fixed;
+  bottom: 0;
+  width: 180px;
+  animation: float 4s ease-in-out infinite;
+  z-index: 1;
+}
+.left1 { left: 10px; }    /* ناروتو */
+.right1 { right: 10px; }  /* لوفي */
+.left2 { left: 200px; bottom: 50px; width: 160px;} /* ليفاي */
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-15px); }
+}
+
+/* رسالة الترحيب */
+.welcome {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  z-index: 9999;
+  animation: fadeOut 1s ease forwards;
+  animation-delay: 3s;
+}
+.welcome h1 {
+  font-size: 48px;
+  color: #ff0000;
+  text-shadow: 0 0 20px #ff0000;
+  animation: pulse 1.5s infinite;
+}
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+@keyframes fadeOut {
+  to { opacity: 0; visibility: hidden; }
+}
+
+/* صورة ناروتو الرئيسية */
+.naruto-container {
+  position: relative;
+  display: inline-block;
+  margin-top: 20px;
+  z-index: 2;
+}
+.naruto-container img {
+  max-width: 300px;
+  border-radius: 15px;
+  box-shadow: 0 0 30px #ff0000;
+  transition: transform 0.3s ease;
+}
+.naruto-container img:hover {
+  transform: scale(1.05);
+}
+
+/* النص يحيى 20 */
+.overlay-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ffffff;
+  font-size: 32px;
+  font-weight: bold;
+  text-shadow: 0 0 10px #ff0000, 0 0 20px #ff0000;
+}
+
+/* عناصر الإدخال */
+.hidden {display:none;}
+input {
+  padding: 10px;
+  width: 200px;
+  border: 2px solid #ff0000;
+  background: #000;
+  color: #fff;
+  border-radius: 8px;
+  margin: 10px;
+  text-align: center;
+  font-size: 16px;
+}
+button {
+  padding: 10px 20px;
+  border: none;
+  background: #ff0000;
+  color: #fff;
+  border-radius: 8px;
+  cursor: pointer;
+  margin: 10px;
+  font-size: 16px;
+  box-shadow: 0 0 15px #ff0000;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+button:hover {
+  background: #ff3333;
+  transform: scale(1.05);
+}
+
+/* زر الموسيقى */
+.music-btn {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  background: rgba(0,0,0,0.6);
+  border: 2px solid #ff0000;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  color: #fff;
+  font-size: 20px;
+  box-shadow: 0 0 10px #ff0000;
+  z-index: 3;
+}
+
+/* عداد زمني */
+.timer {
+  font-size: 24px;
+  color: #ff0000;
+  text-shadow: 0 0 10px #ff0000;
+}
+</style>
+</head>
+<body>
+
+<!-- صور الأنمي الجانبية -->
+<img src="https://www.pngimg.com/uploads/naruto/naruto_PNG49.png" class="anime-char left1" alt="Naruto">
+<img src="https://www.pngmart.com/files/2/Luffy-PNG-Transparent-Image.png" class="anime-char right1" alt="Luffy">
+<img src="https://www.pngmart.com/files/13/Levi-Ackerman-PNG-Pic.png" class="anime-char left2" alt="Levi">
+
+<!-- رسالة ترحيب -->
+<div class="welcome">
+  <h1>👋 مرحباً بك في موقع يحيى 20</h1>
+</div>
+
+<!-- زر الموسيقى -->
+<button class="music-btn" onclick="toggleMusic()">🎵</button>
+
+<!-- موسيقى خلفية مع صوت منخفض -->
+<audio id="bgMusic" autoplay loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-15.mp3" type="audio/mpeg">
+</audio>
+
+<!-- صورة ناروتو + النص -->
+<div class="naruto-container">
+  <img src="https://upload.wikimedia.org/wikipedia/en/9/94/NarutoCoverTankobon1.jpg" alt="Naruto">
+  <div class="overlay-text">يحيى 20</div>
+</div>
+
+<!-- شاشة الرمز وكلمة السر -->
+<div id="lockScreen">
+  <h2>🔒 أدخل الرمز</h2>
+  <input type="text" id="codeInput" placeholder="الرمز هنا">
+  <button onclick="checkCode()">تحقق</button>
+  <p id="codeMsg"></p>
+
+  <div id="passwordStep" class="hidden">
+    <h2>🔑 أدخل كلمة المرور</h2>
+    <input type="password" id="passInput" placeholder="كلمة المرور">
+    <button onclick="checkPass()">دخول</button>
+    <p id="passMsg"></p>
+  </div>
+</div>
+
+<!-- بعد كلمة السر يظهر الاشتراك -->
+<div id="subscribeStep" class="hidden">
+  <h2>✅ تم التأكيد</h2>
+  <p>قبل تحميل الرابط، اشترك في القناة:</p>
+  <button onclick="goToChannel()">📺 اشترك في القناة</button>
+</div>
+
+<!-- بعد الاشتراك يظهر عداد ثم التحميل -->
+<div id="downloadStep" class="hidden">
+  <h2>🎉 شكرا على الاشتراك!</h2>
+  <p>سيظهر رابط التحميل بعد <span class="timer" id="countdown">5</span> ثوانٍ...</p>
+  <div id="finalLink" class="hidden">
+    <a href="https://www.mediafire.com/file/wpgql4fqiw6ubl4/META_ANDROID_ANTIBAN_BY_KHALID_FF.rar/file" target="_blank">
+      <button>⬇ تحميل الرابط الآن</button>
+    </a>
+  </div>
+</div>
+
+<script>
+// تحكم في الصوت
+let music = document.getElementById("bgMusic");
+music.volume = 0.2; // خفض الصوت إلى 20%
+
+function toggleMusic() {
+  if (music.paused) {
+    music.play();
+  } else {
+    music.pause();
+  }
+}
+
+// حماية بسيطة
+const correctCode = atob("Y2s=");  // ck
+const correctPass = atob("NDA0MA=="); // 4040
+const channelLink = "https://www.youtube.com/@yahyaISHAK-q4m";
+
+function checkCode() {
+  let code = document.getElementById("codeInput").value.trim().toLowerCase();
+  if(code === correctCode) {
+    document.getElementById("codeMsg").innerText = "✅ الرمز صحيح!";
+    document.getElementById("passwordStep").classList.remove("hidden");
+  } else {
+    document.getElementById("codeMsg").innerText = "❌ الرمز غير صحيح";
+  }
+}
+
+function checkPass() {
+  let pass = document.getElementById("passInput").value.trim();
+  if(pass === correctPass) {
+    document.getElementById("passMsg").innerText = "✅ كلمة المرور صحيحة!";
+    document.getElementById("lockScreen").style.display = "none";
+    document.getElementById("subscribeStep").classList.remove("hidden");
+  } else {
+    document.getElementById("passMsg").innerText = "⚠️ كلمة المرور خاطئة";
+  }
+}
+
+function goToChannel() {
+  let win = window.open(channelLink, "_blank");
+  let checkInterval = setInterval(() => {
+    if (win.closed) {
+      clearInterval(checkInterval);
+      document.getElementById("subscribeStep").style.display = "none";
+      document.getElementById("downloadStep").classList.remove("hidden");
+      startCountdown();
+    }
+  }, 500);
+}
+
+function startCountdown() {
+  let counter = 5;
+  let countdownEl = document.getElementById("countdown");
+  let timer = setInterval(() => {
+    counter--;
+    countdownEl.textContent = counter;
+    if (counter <= 0) {
+      clearInterval(timer);
+      document.getElementById("finalLink").classList.remove("hidden");
+    }
+  }, 1000);
+}
+</script>
+
+</body>
+  </html>
